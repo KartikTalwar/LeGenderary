@@ -91,6 +91,24 @@ class leGenderary:
         return self.options['unknown']
 
 
+    def determineFromNysiis(self, firstName):
+        hashTable = {}
+        self.generateNysiisHash(self.firstDict, hashTable)
+        self.generateNysiisHash(self.secondDict, hashTable)
+
+        firstName = self._sanitizeName(firstName)
+        nameHash  = fuzzy.nysiis(firstName)
+
+        if nameHash in hashTable:
+            results = hashTable[nameHash]
+            gender  = max(results, key=results.get)
+
+            if results[gender] > 0:
+                return gender
+
+        return self.options['unknown']
+
+
     def parseFirstDataSet(self, fileName):
         names = {}
         f = codecs.open(fileName, 'r', encoding='iso8859-1')
@@ -262,6 +280,7 @@ if __name__ == '__main__':
     nysiishH   = gender.generateNysiisHash(gender.secondDict)
     metaphoneH = gender.generateMetaphoneHash(gender.secondDict)
     soundex    = gender.determineFromSoundex('Rikard')
+    nysiis     = gender.determineFromNysiis('Rikard')
 
-    print soundex
+    print nysiis
 
