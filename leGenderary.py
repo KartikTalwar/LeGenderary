@@ -146,32 +146,32 @@ class leGenderary:
 
 
     def _addToDict(self, soundhash, gender, array):
-        if type(soundhash) == str:
+        if type(soundhash) in [str, unicode]:
             soundhash = [soundhash]
 
         male = self.options['male']
         female = self.options['female']
 
         for i in soundhash:
-            if i is not None:
+            if i != None:
                 if len(i) < 2:
                     break
 
                 if gender == male:
                     if i in array:
                         array[i] = {str(male)   : 1 + array[i][str(male)],
-                                  str(female) : array[i][str(female)]}
+                                    str(female) : array[i][str(female)]}
                     else:
                         array[i] = {str(male)   : 0,
-                                  str(female) : 0}
+                                    str(female) : 0}
 
                 if gender == female:
                     if i in array:
                         array[i] = {str(male)   : array[i][str(male)],
-                                  str(female) : 1 + array[i][str(female)]}
+                                    str(female) : 1 + array[i][str(female)]}
                     else:
                         array[i] = {str(male)   : 0,
-                                  str(female) : 0}
+                                    str(female) : 0}
 
 
     def _cut(self, start, end, data):
