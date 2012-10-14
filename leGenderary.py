@@ -73,6 +73,24 @@ class leGenderary:
         return self.options['unknown']
 
 
+    def determineFromSoundex(self, firstName):
+        hashTable = {}
+        self.generateSoundexHash(self.firstDict, hashTable)
+        self.generateSoundexHash(self.secondDict, hashTable)
+
+        firstName = self._sanitizeName(firstName)
+        nameHash  = fuzzy.Soundex(4)(firstName)
+
+        if nameHash in hashTable:
+            results = hashTable[nameHash]
+            gender  = max(results, key=results.get)
+
+            if results[gender] > 0:
+                return gender
+
+        return self.options['unknown']
+
+
     def parseFirstDataSet(self, fileName):
         names = {}
         f = codecs.open(fileName, 'r', encoding='iso8859-1')
@@ -132,8 +150,8 @@ class leGenderary:
         return names
 
 
-    def generateSoundexHash(self, dictionary):
-        soundexHash = {}
+    def generateSoundexHash(self, dictionary, table=None):
+        soundexHash = {} if table is None else table
 
         for name, gender in dictionary.iteritems():
             name = self._sanitizeName(name)
@@ -145,8 +163,8 @@ class leGenderary:
         return soundexHash
 
 
-    def generateNysiisHash(self, dictionary):
-        nysiisHash = {}
+    def generateNysiisHash(self, dictionary, table=None):
+        nysiisHash = {} if table is None else table
 
         for name, gender in dictionary.iteritems():
             name = self._sanitizeName(name)
@@ -158,8 +176,8 @@ class leGenderary:
         return nysiisHash
 
 
-    def generateMetaphoneHash(self, dictionary):
-        metaphoneHash = {}
+    def generateMetaphoneHash(self, dictionary, table=None):
+        metaphoneHash = {} if table is None else table
 
         for name, gender in dictionary.iteritems():
             name = self._sanitizeName(name)
@@ -168,7 +186,7 @@ class leGenderary:
                 metaphonehash = fuzzy.DMetaphone()(name)
                 self._addToDict(metaphonehash, gender, metaphoneHash)
 
-        return len(metaphoneHash)
+        return metaphoneHash
 
 
     def _addToDict(self, soundhash, gender, array):
@@ -240,9 +258,10 @@ if __name__ == '__main__':
     firstName  = gender.determineFirstName(fullName.split())
     gPeters    = gender.gPetersDotCom(firstName)
     dictionary = gender.determineFromDictionary(firstName)
-    soundex    = gender.generateSoundexHash(gender.secondDict)
-    nysiis     = gender.generateNysiisHash(gender.secondDict)
-    metaphone  = gender.generateMetaphoneHash(gender.secondDict)
+    soundexH   = gender.generateSoundexHash(gender.secondDict)
+    nysiishH   = gender.generateNysiisHash(gender.secondDict)
+    metaphoneH = gender.generateMetaphoneHash(gender.secondDict)
+    soundex    = gender.determineFromSoundex('Rikard')
 
-    print metaphone
+    print soundex
 
