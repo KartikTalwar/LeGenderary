@@ -1,5 +1,12 @@
 # LeGenderary - Determining gender from name
 
+## Dependencies
+
+**Fuzzy**
+
+```sh
+$ sudo pip install Fuzzy
+```
 
 ## Methods
 
