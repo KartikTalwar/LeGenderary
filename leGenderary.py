@@ -3,6 +3,7 @@ import re
 import sys
 import time
 import json
+import fuzzy
 import urllib
 import urllib2
 import codecs
@@ -131,6 +132,48 @@ class leGenderary:
         return names
 
 
+    def generateSoundexHash(self, dictionary):
+        soundexHash = {}
+
+        for name, gender in dictionary.iteritems():
+            name = self._sanitizeName(name)
+
+            if len(name) > 1:
+                soundhash = fuzzy.Soundex(4)(name)
+                self._addToDict(soundhash, gender, soundexHash)
+
+        return soundexHash
+
+
+    def _addToDict(self, soundhash, gender, array):
+        if type(soundhash) == str:
+            soundhash = [soundhash]
+
+        male = self.options['male']
+        female = self.options['female']
+
+        for i in soundhash:
+            if i is not None:
+                if len(i) < 2:
+                    break
+
+                if gender == male:
+                    if i in array:
+                        array[i] = {str(male)   : 1 + array[i][str(male)],
+                                  str(female) : array[i][str(female)]}
+                    else:
+                        array[i] = {str(male)   : 0,
+                                  str(female) : 0}
+
+                if gender == female:
+                    if i in array:
+                        array[i] = {str(male)   : array[i][str(male)],
+                                  str(female) : 1 + array[i][str(female)]}
+                    else:
+                        array[i] = {str(male)   : 0,
+                                  str(female) : 0}
+
+
     def _cut(self, start, end, data):
         rez = []
         one = data.split(start)
@@ -171,6 +214,7 @@ if __name__ == '__main__':
     firstName  = gender.determineFirstName(fullName.split())
     gPeters    = gender.gPetersDotCom(firstName)
     dictionary = gender.determineFromDictionary(firstName)
+    soundex    = gender.generateSoundexHash(gender.secondDict)
 
-    print dictionary
+    print soundex
 
