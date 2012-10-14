@@ -13,6 +13,8 @@ class leGenderary:
 
     def __init__(self, options):
         self.options = options
+        self.firstDict = self.parseFirstDataSet(options['dict1'])
+        self.secondDict = self.parseSecondDataSet(options['dict2'])
 
 
     def determineFirstName(self, nameArray):
@@ -58,6 +60,77 @@ class leGenderary:
         return gender
 
 
+    def determineFromDictionary(self, firstName):
+        firstName = self._sanitizeName(firstName)
+
+        if firstName in self.firstDict:
+            return self.firstDict[firstName]
+
+        if firstName in self.secondDict:
+            return self.secondDict[firstName]
+
+        return self.options['unknown']
+
+
+    def parseFirstDataSet(self, fileName):
+        names = {}
+        f = codecs.open(fileName, 'r', encoding='iso8859-1')
+        line = f.readline()
+
+        while line:
+            if line.startswith("#") or line.startswith("="):
+                pass
+
+            parts = filter(lambda p: p.strip() != "", line.split(" "))
+
+            if "F" in parts[0]:
+                name = parts[1].lower()
+                gender = self.options['female']
+            elif "M" in parts[0]:
+                name = parts[1].lower()
+                gender = self.options['male']
+            else:
+                name = parts[1].lower()
+                gender = self.options['androgynous']
+
+            if names.has_key(name):
+                pass
+            if "+" in name:
+                for replacement in [ '', '-', ' ' ]:
+                    name = name.replace('+', replacement).lower()
+            else:
+                names[name] = gender
+
+            line = f.readline()
+
+        f.close()
+
+        return names
+
+
+    def parseSecondDataSet(self, fileName):
+        names = {}
+        f = codecs.open(fileName, 'r', encoding='iso8859-1').read()
+
+        for person in f.split("\n"):
+            try:
+                separate = person.split(',')
+                name = separate[0].lower()
+
+                if int(separate[1]) == 0:
+                    gender = self.options['male']
+                elif int(separate[1]) == 1:
+                    gender = self.options['female']
+                else:
+                    gender = self.options['androgynous']
+
+                names[name] = gender
+            except:
+                pass
+
+        return names
+
+
     def _cut(self, start, end, data):
         rez = []
         one = data.split(start)
@@ -91,16 +164,16 @@ if __name__ == '__main__':
                 'unknown'       : 'unknown',
                 'maleConfirm'   : 'male needs confirmation',
                 'femaleConfirm' : 'female needs confirmation',
-                'dictionary'    : 'dict1.txt',
-                'dictionary2'   : 'dict2.txt',
-                'bingapikey'    : ''
+                'dict1'         : 'dict1.txt',
+                'dict2'         : 'dict2.txt',
                }
 
     gender = leGenderary(options)
     fullName = "Dr. Richard P. Feynman"
 
-    firstName = gender.determineFirstName(fullName.split())
-    gPeters   = gender.gPetersDotCom(firstName)
+    firstName  = gender.determineFirstName(fullName.split())
+    gPeters    = gender.gPetersDotCom(firstName)
+    dictionary = gender.determineFromDictionary(firstName)
 
-    print gPeters
+    print dictionary
 
