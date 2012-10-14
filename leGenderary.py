@@ -139,10 +139,7 @@ class leGenderary:
             two = one[i].split(end)
             rez.append(two[0])
 
-        if len(rez) is 1:
-            return rez[0]
-
-        return rez
+        return rez[0] if len(rez) == 1 else rez
 
 
     def _stripTags(self, html):
