@@ -145,6 +145,32 @@ class leGenderary:
         return soundexHash
 
 
+    def generateNysiisHash(self, dictionary):
+        nysiisHash = {}
+
+        for name, gender in dictionary.iteritems():
+            name = self._sanitizeName(name)
+
+            if len(name) > 1:
+                nysiishash = fuzzy.nysiis(name)
+                self._addToDict(nysiishash, gender, nysiisHash)
+
+        return nysiisHash
+
+
+    def generateMetaphoneHash(self, dictionary):
+        metaphoneHash = {}
+
+        for name, gender in dictionary.iteritems():
+            name = self._sanitizeName(name)
+
+            if len(name) > 1:
+                metaphonehash = fuzzy.DMetaphone()(name)
+                self._addToDict(metaphonehash, gender, metaphoneHash)
+
+        return len(metaphoneHash)
+
+
     def _addToDict(self, soundhash, gender, array):
         if type(soundhash) in [str, unicode]:
             soundhash = [soundhash]
@@ -215,6 +241,8 @@ if __name__ == '__main__':
     gPeters    = gender.gPetersDotCom(firstName)
     dictionary = gender.determineFromDictionary(firstName)
     soundex    = gender.generateSoundexHash(gender.secondDict)
+    nysiis     = gender.generateNysiisHash(gender.secondDict)
+    metaphone  = gender.generateMetaphoneHash(gender.secondDict)
 
-    print soundex
+    print metaphone
 
