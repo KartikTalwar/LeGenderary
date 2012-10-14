@@ -36,6 +36,52 @@ class leGenderary:
             return ' '.join(nameArray)
 
 
+    def gPetersDotCom(self, name):
+        url    = 'http://www.gpeters.com/names/baby-names.php?name=' + self._sanitizeName(name)
+        opener = urllib2.build_opener()
+        opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+        get    = opener.open(url).read()
+
+        try:
+            findGender  = self._cut("<b>It's a ", '</b>', get)
+            findGender  = self.options['male'] if findGender.find('boy') == 0 else self.options['female']
+            probability = self._cut("Based on popular usage", " times more common", get)
+            probability = float(self._stripTags(probability).split()[-1])
+
+            if probability < 1.20:
+                gender = self.options['androgynous']
+            else:
+                gender = findGender
+        except:
+            gender = self.options['unknown']
+
+        return gender
+
+
+    def _cut(self, start, end, data):
+        rez = []
+        one = data.split(start)
+
+        for i in range(1, len(one)):
+            two = one[i].split(end)
+            rez.append(two[0])
+
+        if len(rez) is 1:
+            return rez[0]
+
+        return rez
+
+
+    def _stripTags(self, html):
+        return re.sub("(<[^>]*?>|\n|\r|\t)", '', html)
+
+
+    def _sanitizeName(self, name):
+        name = name.lower()
+        name = re.sub("[^A-Za-z]", "", name)
+        return name
+
+
 
 if __name__ == '__main__':
 
@@ -53,5 +99,8 @@ if __name__ == '__main__':
     gender = leGenderary(options)
     fullName = "Dr. Richard P. Feynman"
 
-    print gender.determineFirstName(fullName.split())
+    firstName = gender.determineFirstName(fullName.split())
+    gPeters   = gender.gPetersDotCom(firstName)
+
+    print gPeters
 
