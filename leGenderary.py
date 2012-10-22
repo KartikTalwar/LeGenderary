@@ -290,6 +290,50 @@ class leGenderary:
         return metaphoneHash
 
 
+    def bingSearch(self, query, name, identifier):
+
+        query   = urllib.quote_plus(query)
+        url     = "https://api.datamarket.azure.com/Data.ashx"
+        url    += "/Bing/Search/Web?$format=json&Query='%s'" % query
+
+        request = urllib2.Request(url)
+        apikey  = self.options['bingAPIKey']
+        auth    = base64.encodestring("%s:%s" % (apikey, apikey)).replace("\n", "")
+
+        request.add_header("Authorization", "Basic %s" % auth)
+
+        res     = urllib2.urlopen(request)
+        data    = res.read()
+        parse   = json.loads(data)['d']['results']
+        count   = 0
+
+        for i in parse:
+            title       = i['Title'].lower().replace(' ', '')
+            description = i['Description'].lower().replace(' ', '')
+
+            idx1 = description.find(name)
+            idx2 = description.find(identifier)
+
+            # Assigning random weights
+            if name.replace(' ', '') in title:
+                count += 20
+                if identifier in title:
+                    count += 50
+
+            if identifier in title:
+                count += 5
+
+            if idx1 != -1 and idx1 != -1:
+                if idx1 < idx2:
+                    count += 10
+                if (idx2 - idx1) >= 0 and (idx2 - idx1) <= 35:
+                    count += 50
+
+            count += 2
+
+        return count
+
+
     def _addToDict(self, soundhash, gender, array):
         if type(soundhash) in [str, unicode]:
             soundhash = [soundhash]
@@ -351,6 +395,7 @@ if __name__ == '__main__':
                 'femaleConfirm' : 'female needs confirmation',
                 'dict1'         : 'dict1.txt',
                 'dict2'         : 'dict2.txt',
+                'bingAPIKey'    : ''
                }
 
     gender = leGenderary(options)
@@ -367,6 +412,7 @@ if __name__ == '__main__':
     metaphone  = gender.determineFromMetaphone('Rikard')
     takeaguess = gender.randomGuess(firstName)
     phonetic   = gender.determineFromPhonetic('Rikard')
+    websearch  = gender.bingSearch(fullName, firstName, "he was an")
 
-    print phonetic
+    print websearch
 
