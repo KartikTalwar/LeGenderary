@@ -128,6 +128,19 @@ class leGenderary:
         return self.options['unknown']
 
 
+    def determineFromPhonetic(self, firstName):
+        soundex   = self.determineFromSoundex(firstName)
+        nysiis    = self.determineFromNysiis(firstName)
+        metaphone = self.determineFromMetaphone(firstName)
+
+        genders = [soundex, nysiis, metaphone]
+
+        if len(set(genders)) == len(genders):
+            return self.options['unknown']
+
+        return max(set(genders), key=genders.count)
+
+
     def randomGuess(self, firstName):
 
         male = options['male']
@@ -352,7 +365,8 @@ if __name__ == '__main__':
     soundex    = gender.determineFromSoundex('Rikard')
     nysiis     = gender.determineFromNysiis('Rikard')
     metaphone  = gender.determineFromMetaphone('Rikard')
-    takeaguess  = gender.randomGuess(firstName)
+    takeaguess = gender.randomGuess(firstName)
+    phonetic   = gender.determineFromPhonetic(firstName)
 
-    print takeaguess
+    print phonetic
 
