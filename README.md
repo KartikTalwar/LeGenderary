@@ -31,6 +31,27 @@ firstName = 'Richard'
 print gender.determineFromDictionary(firstName) # male
 ```
 
+#### determineFromSoundex(firstName)
+
+```python
+firstName = 'Rikard'
+print gender.determineFromSoundex(firstName) # male
+```
+
+#### determineFromNysiis(firstName)
+
+```python
+firstName = 'Rikard'
+print gender.determineFromNysiis(firstName) # male
+```
+
+#### determineFromMetaphone(firstName)
+
+```python
+firstName = 'Rikard'
+print gender.determineFromMetaphone(firstName) # should be male
+```
+
 
 ## Full Usage Example
 
