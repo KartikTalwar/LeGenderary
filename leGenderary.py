@@ -132,6 +132,7 @@ class leGenderary:
 
         male = options['male']
         female = options['female']
+        firstName = self._sanitizeName(firstName)
 
         def rand(m, f):
             prob = [male] * m + [male] * f

@@ -52,6 +52,13 @@ firstName = 'Rikard'
 print gender.determineFromMetaphone(firstName) # should be male
 ```
 
+#### randomGuess(firstName)
+
+```python
+firstName = 'Richard'
+print gender.randomGuess(firstName) # male
+```
+
 
 ## Full Usage Example
 
