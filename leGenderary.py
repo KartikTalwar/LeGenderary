@@ -366,7 +366,7 @@ if __name__ == '__main__':
     nysiis     = gender.determineFromNysiis('Rikard')
     metaphone  = gender.determineFromMetaphone('Rikard')
     takeaguess = gender.randomGuess(firstName)
-    phonetic   = gender.determineFromPhonetic(firstName)
+    phonetic   = gender.determineFromPhonetic('Rikard')
 
     print phonetic
 
