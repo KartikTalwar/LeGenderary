@@ -4,6 +4,7 @@ import sys
 import time
 import json
 import fuzzy
+import random
 import urllib
 import urllib2
 import codecs
@@ -125,6 +126,56 @@ class leGenderary:
                 return gender
 
         return self.options['unknown']
+
+
+    def randomGuess(self, firstName):
+
+        male = options['male']
+        female = options['female']
+
+        def rand(m, f):
+            prob = [male] * m + [male] * f
+            return random.choice(prob)
+
+        if len(firstName) > 2:
+            last = firstName[-1]
+            secondlast = firstName[-2]
+
+            if last in ['a', 'e', 'n', 'i']:
+                if last is 'n' and secondlast in ['n', 'i', 'e']:
+                    return female
+                if last is not 'n':
+                    return female
+            if last in ['n', 's', 'd', 'r', 'o', 'k']:
+                return male
+            if last is 'y':
+                if secondlast in ['a', 'o']:
+                    return male
+                if secondlast in ['l', 't']:
+                    return female
+                return rand(male=40, female=60)
+            if last is 'l':
+                if secondlast in ['a', 'e', 'i', 'o', 'u', 'l']:
+                    return rand(male=80, female=20)
+            if last is 'e':
+                if secondlast in ['i', 't', 'l']:
+                    return female
+                if secondlast in ['v', 'm', 'g']:
+                    return male
+                if secondlast in ['n', 'c', 's', 'e', 'd']:
+                    return rand(male=35, female=65)
+            if last is 'h':
+                if secondlast in ['t', 'a']:
+                    return female
+                return male
+            if last is 't':
+                if secondlast in ['e', 'i']:
+                    return female
+                return male
+            if last is 'm':
+                return rand(male=90, female=10)
+
+        return rand(male=65, female=35)
 
 
     def parseFirstDataSet(self, fileName):
@@ -300,6 +351,7 @@ if __name__ == '__main__':
     soundex    = gender.determineFromSoundex('Rikard')
     nysiis     = gender.determineFromNysiis('Rikard')
     metaphone  = gender.determineFromMetaphone('Rikard')
+    takeaguess  = gender.randomGuess(firstName)
 
-    print metaphone, soundex, nysiis
+    print takeaguess
 
