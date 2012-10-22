@@ -109,6 +109,24 @@ class leGenderary:
         return self.options['unknown']
 
 
+    def determineFromMetaphone(self, firstName):
+        hashTable = {}
+        self.generateMetaphoneHash(self.firstDict, hashTable)
+        self.generateMetaphoneHash(self.secondDict, hashTable)
+
+        firstName = self._sanitizeName(firstName)
+        nameHash  = fuzzy.nysiis(firstName)
+
+        if nameHash in hashTable:
+            results = hashTable[nameHash]
+            gender  = max(results, key=results.get)
+
+            if results[gender] > 0:
+                return gender
+
+        return self.options['unknown']
+
+
     def parseFirstDataSet(self, fileName):
         names = {}
         f = codecs.open(fileName, 'r', encoding='iso8859-1')
@@ -281,6 +299,7 @@ if __name__ == '__main__':
     metaphoneH = gender.generateMetaphoneHash(gender.secondDict)
     soundex    = gender.determineFromSoundex('Rikard')
     nysiis     = gender.determineFromNysiis('Rikard')
+    metaphone  = gender.determineFromMetaphone('Rikard')
 
-    print nysiis
+    print metaphone, soundex, nysiis
 
