@@ -147,7 +147,7 @@ class leGenderary:
         firstName = self._sanitizeName(firstName)
 
         def rand(m, f):
-            prob = [male] * m + [male] * f
+            prob = [options['male']] * m + [options['female']] * f
             return random.choice(prob)
 
         if len(firstName) > 2:
@@ -166,17 +166,17 @@ class leGenderary:
                     return male
                 if secondlast in ['l', 't']:
                     return female
-                return rand(male=40, female=60)
+                return rand(m=40, f=60)
             if last is 'l':
                 if secondlast in ['a', 'e', 'i', 'o', 'u', 'l']:
-                    return rand(male=80, female=20)
+                    return rand(m=80, f=20)
             if last is 'e':
                 if secondlast in ['i', 't', 'l']:
                     return female
                 if secondlast in ['v', 'm', 'g']:
                     return male
                 if secondlast in ['n', 'c', 's', 'e', 'd']:
-                    return rand(male=35, female=65)
+                    return rand(m=35, f=65)
             if last is 'h':
                 if secondlast in ['t', 'a']:
                     return female
@@ -186,9 +186,9 @@ class leGenderary:
                     return female
                 return male
             if last is 'm':
-                return rand(male=90, female=10)
+                return rand(m=90, f=10)
 
-        return rand(male=65, female=35)
+        return rand(m=65, f=35)
 
 
     def determineFromBing(self, name):
@@ -246,6 +246,38 @@ class leGenderary:
             return self.options['unknown']
 
         return max(set(genders), key=genders.count)
+
+
+    def determineGender(self, fullName, reqd=True):
+        firstName  = self.determineFirstName(fullName.split())
+        definite   = [self.options['male'], self.options['female']]
+        indefinite = [self.options['androgynous'], self.options['unknown']]
+
+        dictionary = self.determineFromDictionary(firstName)
+        if dictionary in definite:
+            return dictionary
+
+        phonetics  = self.determineFromPhonetic(firstName)
+        if phonetics in definite:
+            return phonetics
+
+        usetheweb  = self.determineFromInternet(fullName)
+        if usetheweb in definite:
+            if usetheweb == self.options['male']:
+                return self.options['maleConfirm']
+            if usetheweb == self.options['female']:
+                return self.options['femaleConfirm']
+
+        if not reqd:
+            return self.options['unknown']
+
+        random     = [self.randomGuess(firstName) for i in range(0,5)]
+        random     = self._mostCommon(random)
+        if random in definite:
+            if random == self.options['male']:
+                return self.options['maleConfirm']
+            if random == self.options['female']:
+                return self.options['femaleConfirm']
 
 
     def parseFirstDataSet(self, fileName):
@@ -352,7 +384,7 @@ class leGenderary:
         url    += "/Bing/Search/Web?$format=json&Query='%s'" % query
 
         if len(self.options['bingAPIKey']) == 0:
-            return 'Please provide an API key from Azure marketplace'
+            return 0
 
         request = urllib2.Request(url)
         apikey  = self.options['bingAPIKey']
@@ -423,6 +455,10 @@ class leGenderary:
                                     str(female) : 0}
 
 
+    def _mostCommon(self, array):
+        return max(set(array), key=array.count)
+
+
     def _cut(self, start, end, data):
         rez = []
         one = data.split(start)
@@ -475,6 +511,7 @@ if __name__ == '__main__':
     phonetic   = gender.determineFromPhonetic('Rikard')
     usebing    = gender.determineFromBing(fullName)
     internet   = gender.determineFromInternet(fullName)
+    getgender  = gender.determineGender(fullName)
 
-    print internet
+    print getgender
 
