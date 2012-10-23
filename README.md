@@ -10,6 +10,13 @@ $ sudo pip install Fuzzy
 
 ## Methods
 
+#### determineGender(fullName)
+
+```python
+fullName = "Dr. Richard P. Feynman"
+print gender.determineGender(fullName) # male
+```
+
 #### determineFirstName(nameArray)
 
 ```python
