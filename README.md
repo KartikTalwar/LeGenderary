@@ -75,6 +75,13 @@ fullName = 'Richard P. Feynman'
 print gender.determineFromBing(fullName) # male
 ```
 
+#### determineFromInternet(fullName)
+
+```python
+fullName = 'Richard P. Feynman'
+print gender.determineFromBing(fullName) # male
+```
+
 
 ## Full Usage Example
 
@@ -93,7 +100,7 @@ gender   = leGenderary(options)
 fullName = "Dr. Richard P. Feynman"
 
 firstName  = gender.determineFirstName(fullName.split())
-gPeters    = gender.gPetersDotCom(firstName)
+gPeters    = gender.determineFromGPeters(firstName)
 dictionary = gender.determineFromDictionary(firstName)
 
 print dictionary
