@@ -17,11 +17,11 @@ fullName = "Dr. Richard P. Feynman"
 print gender.determineFirstName(fullName.split()) # Richard
 ```
 
-#### gPetersDotCom(firstName)
+#### determineFromGPeters(firstName)
 
 ```python
 firstName = 'Richard'
-print gender.gPetersDotCom(firstName) # male
+print gender.determineFromGPeters(firstName) # male
 ```
 
 #### determineFromDictionary(firstName)
