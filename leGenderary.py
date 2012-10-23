@@ -351,6 +351,9 @@ class leGenderary:
         url     = "https://api.datamarket.azure.com/Data.ashx"
         url    += "/Bing/Search/Web?$format=json&Query='%s'" % query
 
+        if len(self.options['bingAPIKey']) == 0:
+            return 'Please provide an API key from Azure marketplace'
+
         request = urllib2.Request(url)
         apikey  = self.options['bingAPIKey']
         auth    = base64.encodestring("%s:%s" % (apikey, apikey)).replace("\n", "")
