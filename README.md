@@ -66,6 +66,13 @@ firstName = 'Richard'
 print gender.randomGuess(firstName) # male
 ```
 
+#### determineFromBing(fullName)
+
+```python
+fullName = 'Richard P. Feynman'
+print gender.determineFromBing(fullName) # male
+```
+
 
 ## Full Usage Example
 
