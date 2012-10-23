@@ -192,6 +192,19 @@ class leGenderary:
         return rand(male=65, female=35)
 
 
+    def determineFromInternet(self, fullName):
+        firstName = self.determineFirstName(fullName.split())
+        gpeters   = self.determineFromGPeters(firstName)
+        bing      = self.determineFromBing(fullName)
+
+        genders = [gpeters, bing]
+
+        if len(set(genders)) == len(genders):
+            return self.options['unknown']
+
+        return max(set(genders), key=genders.count)
+
+
     def parseFirstDataSet(self, fileName):
         names = {}
         f = codecs.open(fileName, 'r', encoding='iso8859-1')
@@ -461,6 +474,7 @@ if __name__ == '__main__':
     takeaguess = gender.randomGuess(firstName)
     phonetic   = gender.determineFromPhonetic('Rikard')
     usebing    = gender.determineFromBing(fullName)
+    internet   = gender.determineFromInternet(fullName)
 
-    print usebing
+    print internet
 
