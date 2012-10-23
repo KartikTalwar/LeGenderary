@@ -40,7 +40,7 @@ class leGenderary:
             return ' '.join(nameArray)
 
 
-    def gPetersDotCom(self, name):
+    def determineFromGPeters(self, name):
         url    = 'http://www.gpeters.com/names/baby-names.php?name=' + self._sanitizeName(name)
         opener = urllib2.build_opener()
         opener.addheaders = [('User-agent', 'Mozilla/5.0')]
@@ -450,7 +450,7 @@ if __name__ == '__main__':
     fullName = "Dr. Richard P. Feynman"
 
     firstName  = gender.determineFirstName(fullName.split())
-    gPeters    = gender.gPetersDotCom(firstName)
+    gPeters    = gender.determineFromGPeters(firstName)
     dictionary = gender.determineFromDictionary(firstName)
     soundexH   = gender.generateSoundexHash(gender.secondDict)
     nysiishH   = gender.generateNysiisHash(gender.secondDict)
