@@ -142,7 +142,6 @@ class leGenderary:
 
 
     def randomGuess(self, firstName):
-
         male = options['male']
         female = options['female']
         firstName = self._sanitizeName(firstName)
@@ -190,6 +189,50 @@ class leGenderary:
                 return rand(male=90, female=10)
 
         return rand(male=65, female=35)
+
+
+    def determineFromBing(self, name):
+        sequence = [{"male"   : "%s and his",
+                     "female" : "%s and her",
+                     "idm"    : "his",
+                     "idf"    : "her"},
+                    #{"male"   : "his * and %s",
+                    # "female" : "her * and %s",
+                    # "idm"    : "his",
+                    # "idf"    : "her"},
+                    #{"male"   : "%s himself",
+                    # "female" : "%s herself",
+                    # "idm"    : "himself",
+                    # "idf"    : "herself"},
+                    {"male"   : "Mr %s",
+                     "female" : "Mrs %s",
+                     "idm"    : "mr",
+                     "idf"    : "mrs"}]
+
+        male, female, prob  = 0.0, 0.0, 0.0
+
+        for q in sequence:
+            p_m = self.bingSearch(q["male"]   % name, name, q['idm'])
+            p_f = self.bingSearch(q["female"] % name, name, q['idf'])
+
+            tot     = p_m + p_f + 10.0
+            prob   += 1.0
+            male   += (p_m*1.0) / tot
+            female += (p_f*1.0) / tot
+
+        male   /= prob
+        female /= prob
+
+        if abs(male-female) < 0.02:
+            gender = self.options['unknown']
+        elif male > female:
+            gender = self.options['male']
+        elif male < female:
+            gender = self.options['female']
+        else:
+            gender = self.options['unknown']
+
+        return gender
 
 
     def determineFromInternet(self, fullName):
@@ -303,53 +346,7 @@ class leGenderary:
         return metaphoneHash
 
 
-    def determineFromBing(self, name):
-
-        sequence = [{"male"   : "%s and his",
-                     "female" : "%s and her",
-                     "idm"    : "his",
-                     "idf"    : "her"},
-                    #{"male"   : "his * and %s",
-                    # "female" : "her * and %s",
-                    # "idm"    : "his",
-                    # "idf"    : "her"},
-                    #{"male"   : "%s himself",
-                    # "female" : "%s herself",
-                    # "idm"    : "himself",
-                    # "idf"    : "herself"},
-                    {"male"   : "Mr %s",
-                     "female" : "Mrs %s",
-                     "idm"    : "mr",
-                     "idf"    : "mrs"}]
-
-        male, female, prob  = 0.0, 0.0, 0.0
-
-        for q in sequence:
-            p_m = self.bingSearch(q["male"]   % name, name, q['idm'])
-            p_f = self.bingSearch(q["female"] % name, name, q['idf'])
-
-            tot     = p_m + p_f + 10.0
-            prob   += 1.0
-            male   += (p_m*1.0) / tot
-            female += (p_f*1.0) / tot
-
-        male   /= prob
-        female /= prob
-
-        if abs(male-female) < 0.02:
-            gender = self.options['unknown']
-        elif male > female:
-            gender = self.options['male']
-        elif male < female:
-            gender = self.options['female']
-        else:
-            gender = self.options['unknown']
-
-        return gender
-
-
     def bingSearch(self, query, name, identifier):
-
         query   = urllib.quote_plus(query)
         url     = "https://api.datamarket.azure.com/Data.ashx"
         url    += "/Bing/Search/Web?$format=json&Query='%s'" % query
