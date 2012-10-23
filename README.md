@@ -61,6 +61,8 @@ print gender.determineFromPhonetic(firstName) # male
 
 #### randomGuess(firstName)
 
+For the 2 given dictionaries, the success rate for male identification ranges between 39-43% and 80-82% for females
+
 ```python
 firstName = 'Richard'
 print gender.randomGuess(firstName) # male
