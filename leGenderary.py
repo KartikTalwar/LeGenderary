@@ -17,6 +17,7 @@ class leGenderary:
         self.options = options
         self.firstDict = self.parseFirstDataSet(options['dict1'])
         self.secondDict = self.parseSecondDataSet(options['dict2'])
+        self.customDict = self.parseSecondDataSet(options['customDict'])
 
 
     def determineFirstName(self, nameArray):
@@ -70,6 +71,9 @@ class leGenderary:
 
         if firstName in self.secondDict:
             return self.secondDict[firstName]
+
+        if firstName in self.customDict:
+            return self.customDict[firstName]
 
         return self.options['unknown']
 
@@ -347,7 +351,7 @@ class leGenderary:
 
             if len(name) > 1:
                 soundhash = fuzzy.Soundex(4)(name)
-                self._addToDict(soundhash, gender, soundexHash)
+                self._appendToDict(soundhash, gender, soundexHash)
 
         return soundexHash
 
@@ -360,7 +364,7 @@ class leGenderary:
 
             if len(name) > 1:
                 nysiishash = fuzzy.nysiis(name)
-                self._addToDict(nysiishash, gender, nysiisHash)
+                self._appendToDict(nysiishash, gender, nysiisHash)
 
         return nysiisHash
 
@@ -373,7 +377,7 @@ class leGenderary:
 
             if len(name) > 1:
                 metaphonehash = fuzzy.DMetaphone()(name)
-                self._addToDict(metaphonehash, gender, metaphoneHash)
+                self._appendToDict(metaphonehash, gender, metaphoneHash)
 
         return metaphoneHash
 
@@ -426,7 +430,7 @@ class leGenderary:
         return count
 
 
-    def _addToDict(self, soundhash, gender, array):
+    def _appendToDict(self, soundhash, gender, array):
         if type(soundhash) in [str, unicode]:
             soundhash = [soundhash]
 
@@ -453,6 +457,19 @@ class leGenderary:
                     else:
                         array[i] = {str(male)   : 0,
                                     str(female) : 0}
+
+
+    def _addToDictionary(self, name, gender, customDict):
+        if gender == self.options['male']:
+            gender = '0'
+        if gender == self.options['female']:
+            gender = '1'
+
+        if gender not in ['0', '1']:
+            return
+
+        data = name.lower() + ',' + gender
+        f = open(customDict, 'a').write(data.encode('utf-8')+"\n")
 
 
     def _mostCommon(self, array):
@@ -492,6 +509,7 @@ if __name__ == '__main__':
                 'femaleConfirm' : 'female needs confirmation',
                 'dict1'         : 'dict1.txt',
                 'dict2'         : 'dict2.txt',
+                'customDict'    : 'custom.txt',
                 'bingAPIKey'    : ''
                }
 
