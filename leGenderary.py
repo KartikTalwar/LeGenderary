@@ -66,14 +66,19 @@ class leGenderary:
     def determineFromDictionary(self, firstName):
         firstName = self._sanitizeName(firstName)
 
+        if firstName in self.customDict:
+            gender = self.customDict[firstName]
+            if gender == '00':
+                return self.options['maleConfirm']
+            if gender == '11':
+                return self.options['femaleConfirm']
+            return gender
+
         if firstName in self.firstDict:
             return self.firstDict[firstName]
 
         if firstName in self.secondDict:
             return self.secondDict[firstName]
-
-        if firstName in self.customDict:
-            return self.customDict[firstName]
 
         return self.options['unknown']
 
@@ -468,7 +473,7 @@ class leGenderary:
             gender = '0'
         if gender == self.options['female']:
             gender = '1'
-       if gender == self.options['maleConfirm']:
+        if gender == self.options['maleConfirm']:
             gender = '00'
         if gender == self.options['femaleConfirm']:
             gender = '11'
