@@ -263,13 +263,16 @@ class leGenderary:
 
         phonetics  = self.determineFromPhonetic(firstName)
         if phonetics in definite:
+            self._addToDictionary(firstName, phonetics, self.options['customDict'])
             return phonetics
 
         usetheweb  = self.determineFromInternet(fullName)
         if usetheweb in definite:
             if usetheweb == self.options['male']:
+                self._addToDictionary(firstName, self.options['maleConfirm'], self.options['customDict'])
                 return self.options['maleConfirm']
             if usetheweb == self.options['female']:
+                self._addToDictionary(firstName, self.options['femaleConfirm'], self.options['customDict'])
                 return self.options['femaleConfirm']
 
         if not reqd:
@@ -323,8 +326,9 @@ class leGenderary:
     def parseSecondDataSet(self, fileName):
         names = {}
         f = codecs.open(fileName, 'r', encoding='iso8859-1').read()
+        f = set(f.split("\n"))
 
-        for person in f.split("\n"):
+        for person in f:
             try:
                 separate = person.split(',')
                 name = separate[0].lower()
@@ -464,8 +468,12 @@ class leGenderary:
             gender = '0'
         if gender == self.options['female']:
             gender = '1'
+       if gender == self.options['maleConfirm']:
+            gender = '00'
+        if gender == self.options['femaleConfirm']:
+            gender = '11'
 
-        if gender not in ['0', '1']:
+        if gender not in ['0', '1', '00', '11']:
             return
 
         data = name.lower() + ',' + gender
