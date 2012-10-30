@@ -14,8 +14,8 @@ import base64
 class leGenderary:
 
     def __init__(self, options):
-        self.options = options
-        self.firstDict = self.parseFirstDataSet(options['dict1'])
+        self.options    = options
+        self.firstDict  = self.parseFirstDataSet(options['dict1'])
         self.secondDict = self.parseSecondDataSet(options['dict2'])
         self.customDict = self.parseSecondDataSet(options['customDict'])
 
@@ -58,7 +58,7 @@ class leGenderary:
             else:
                 gender = findGender
         except:
-            gender = self.options['unknown']
+            gender     = self.options['unknown']
 
         return gender
 
@@ -151,8 +151,8 @@ class leGenderary:
 
 
     def randomGuess(self, firstName):
-        male = options['male']
-        female = options['female']
+        male      = options['male']
+        female    = options['female']
         firstName = self._sanitizeName(firstName)
 
         def rand(m, f):
@@ -160,7 +160,7 @@ class leGenderary:
             return random.choice(prob)
 
         if len(firstName) > 2:
-            last = firstName[-1]
+            last       = firstName[-1]
             secondlast = firstName[-2]
 
             if last in ['a', 'e', 'n', 'i']:
@@ -205,14 +205,14 @@ class leGenderary:
                      "female" : "%s and her",
                      "idm"    : "his",
                      "idf"    : "her"},
-                    #{"male"   : "his * and %s",
-                    # "female" : "her * and %s",
-                    # "idm"    : "his",
-                    # "idf"    : "her"},
-                    #{"male"   : "%s himself",
-                    # "female" : "%s herself",
-                    # "idm"    : "himself",
-                    # "idf"    : "herself"},
+                   #{"male"   : "his * and %s",
+                   # "female" : "her * and %s",
+                   # "idm"    : "his",
+                   # "idf"    : "her"},
+                   #{"male"   : "%s himself",
+                   # "female" : "%s herself",
+                   # "idm"    : "himself",
+                   # "idf"    : "herself"},
                     {"male"   : "Mr %s",
                      "female" : "Mrs %s",
                      "idm"    : "mr",
@@ -294,8 +294,8 @@ class leGenderary:
 
     def parseFirstDataSet(self, fileName):
         names = {}
-        f = codecs.open(fileName, 'r', encoding='iso8859-1')
-        line = f.readline()
+        f     = codecs.open(fileName, 'r', encoding='iso8859-1')
+        line  = f.readline()
 
         while line:
             if line.startswith("#") or line.startswith("="):
@@ -304,13 +304,13 @@ class leGenderary:
             parts = filter(lambda p: p.strip() != "", line.split(" "))
 
             if "F" in parts[0]:
-                name = parts[1].lower()
+                name   = parts[1].lower()
                 gender = self.options['female']
             elif "M" in parts[0]:
-                name = parts[1].lower()
+                name   = parts[1].lower()
                 gender = self.options['male']
             else:
-                name = parts[1].lower()
+                name   = parts[1].lower()
                 gender = self.options['androgynous']
 
             if names.has_key(name):
@@ -330,20 +330,20 @@ class leGenderary:
 
     def parseSecondDataSet(self, fileName):
         names = {}
-        f = codecs.open(fileName, 'r', encoding='iso8859-1').read()
-        f = set(f.split("\n"))
+        f     = codecs.open(fileName, 'r', encoding='iso8859-1').read()
+        f     = set(f.split("\n"))
 
         for person in f:
             try:
                 separate = person.split(',')
-                name = separate[0].lower()
+                name     = separate[0].lower()
 
                 if int(separate[1]) == 0:
-                    gender = self.options['male']
+                    gender  = self.options['male']
                 elif int(separate[1]) == 1:
-                    gender = self.options['female']
+                    gender  = self.options['female']
                 else:
-                    gender = self.options['androgynous']
+                    gender  = self.options['androgynous']
 
                 names[name] = gender
             except:
@@ -443,7 +443,7 @@ class leGenderary:
         if type(soundhash) in [str, unicode]:
             soundhash = [soundhash]
 
-        male = self.options['male']
+        male   = self.options['male']
         female = self.options['female']
 
         for i in soundhash:
