@@ -526,23 +526,8 @@ if __name__ == '__main__':
                 'bingAPIKey'    : ''
                }
 
-    gender = leGenderary(options)
+    gender   = leGenderary(options)
     fullName = "Dr. Richard P. Feynman"
+    detect   = gender.determineGender(fullName)
 
-    firstName  = gender.determineFirstName(fullName.split())
-    gPeters    = gender.determineFromGPeters(firstName)
-    dictionary = gender.determineFromDictionary(firstName)
-    soundexH   = gender.generateSoundexHash(gender.secondDict)
-    nysiishH   = gender.generateNysiisHash(gender.secondDict)
-    metaphoneH = gender.generateMetaphoneHash(gender.secondDict)
-    soundex    = gender.determineFromSoundex('Rikard')
-    nysiis     = gender.determineFromNysiis('Rikard')
-    metaphone  = gender.determineFromMetaphone('Rikard')
-    takeaguess = gender.randomGuess(firstName)
-    phonetic   = gender.determineFromPhonetic('Rikard')
-    usebing    = gender.determineFromBing(fullName)
-    internet   = gender.determineFromInternet(fullName)
-    getgender  = gender.determineGender(fullName)
-
-    print getgender
-
+    print detect
