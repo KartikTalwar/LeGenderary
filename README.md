@@ -169,7 +169,11 @@ ______________________________________________________________
 ## Full Usage Example
 
 
+**myProgram.py**
+
 ```python
+from leGenderary import leGenderary
+
 options = { 'male'          : 'male', 
             'female'        : 'female',
             'androgynous'   : 'androgynous',
