@@ -6,9 +6,9 @@ import json
 import fuzzy
 import random
 import urllib
-import urllib2
 import codecs
 import base64
+import urllib2
 
 
 class leGenderary:
@@ -151,12 +151,12 @@ class leGenderary:
 
 
     def randomGuess(self, firstName):
-        male      = options['male']
-        female    = options['female']
+        male      = self.options['male']
+        female    = self.options['female']
         firstName = self._sanitizeName(firstName)
 
         def rand(m, f):
-            prob = [options['male']] * m + [options['female']] * f
+            prob = [self.options['male']] * m + [self.options['female']] * f
             return random.choice(prob)
 
         if len(firstName) > 2:
@@ -392,7 +392,7 @@ class leGenderary:
 
 
     def bingSearch(self, query, name, identifier):
-        query   = urllib.quote_plus(query)
+        query   = urllib.quote_plus(query.encode('utf-8', 'ignore'))
         url     = "https://api.datamarket.azure.com/Data.ashx"
         url    += "/Bing/Search/Web?$format=json&Query='%s'" % query
 
