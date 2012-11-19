@@ -257,7 +257,13 @@ class leGenderary:
         return self._mostCommon(genders)
 
 
-    def determineGender(self, fullName, reqd=True):
+    def determineGender(self, fullName, **kwargs):
+
+        required   = True
+
+        if 'required' in kwargs:
+            required = kwargs['required']
+
         firstName  = self.determineFirstName(fullName.split())
         definite   = [self.options['male'], self.options['female']]
         indefinite = [self.options['androgynous'], self.options['unknown']]
@@ -280,7 +286,7 @@ class leGenderary:
                 self._addToDictionary(firstName, self.options['femaleConfirm'], self.options['customDict'])
                 return self.options['femaleConfirm']
 
-        if not reqd:
+        if not required:
             return self.options['unknown']
 
         random     = self._mostCommon([self.randomGuess(firstName) for i in range(0,5)])
@@ -527,6 +533,6 @@ if __name__ == '__main__':
 
     gender   = leGenderary(options)
     fullName = "Dr. Richard P. Feynman"
-    detect   = gender.determineGender(fullName)
+    detect   = gender.determineGender(fullName, required=False)
 
     print detect
