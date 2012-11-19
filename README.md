@@ -44,7 +44,7 @@ which call their respective sub-functions.
 
 
 - determineFirstName(fullName)
-- **determineGender(fullName)**
+- **determineGender(fullName, required)**
   - **determineFromDictionary(firstName)**
   - **determineFromPhonetic(firstName)**
      - determineFromSoundex(firstName)
@@ -68,13 +68,16 @@ ______________________________________________________________
     print gender.determineFirstName(fullName) # Richard
     ```
 
-- ### **determineGender(fullName)**
+- ### **determineGender(fullName, required)**
 
-    Calls the 4 main functions that check for gender from dictionary, internet, phonetics and random guessing
+    Calls the 4 main functions that check for gender from dictionary, internet, phonetics and random guessing.
+    if `required` is set to True (default is True), the output will return either male of female (upon guessing).
+    If set to False the output will be *unknown* upon failure to determine.
+
 
     ```python
     fullName = "Dr. Richard P. Feynman"
-    print gender.determineGender(fullName) # male
+    print gender.determineGender(fullName, required=False) # male
     ```
 
     - #### **determineFromDictionary(firstName)**
