@@ -147,7 +147,7 @@ class leGenderary:
         if len(set(genders)) == len(genders):
             return self.options['unknown']
 
-        return max(set(genders), key=genders.count)
+        return self._mostCommon(genders)
 
 
     def randomGuess(self, firstName):
@@ -254,7 +254,7 @@ class leGenderary:
         if len(set(genders)) == len(genders):
             return self.options['unknown']
 
-        return max(set(genders), key=genders.count)
+        return self._mostCommon(genders)
 
 
     def determineGender(self, fullName, reqd=True):
@@ -283,8 +283,7 @@ class leGenderary:
         if not reqd:
             return self.options['unknown']
 
-        random     = [self.randomGuess(firstName) for i in range(0,5)]
-        random     = self._mostCommon(random)
+        random     = self._mostCommon([self.randomGuess(firstName) for i in range(0,5)])
         if random in definite:
             if random == self.options['male']:
                 return self.options['maleConfirm']
