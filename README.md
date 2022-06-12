@@ -10,7 +10,7 @@ $ sudo pip install Fuzzy
 
 **Name-Gender Dictionaries**
 
-The dictionaries can be found on [downloads page] (https://github.com/KartikTalwar/LeGenderary/downloads)
+The dictionaries can be [downloaded here](https://github.com/downloads/KartikTalwar/LeGenderary/dictionaries.zip)
 
 ## Methods
 
